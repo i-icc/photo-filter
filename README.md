@@ -1,6 +1,8 @@
 # photo-filter
 ブラウザで動くオリジナル画像フィルターです(wasm を使って何かしたかった)
 
+pages : https://i-icc.github.io/photo-filter/
+
 ## wasm(Rust) side
 
 ### setup
