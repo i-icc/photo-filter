@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wasm test</title>
+</head>
+
+<body>
+    <input type="file" id="upload">
+    <canvas id="canvas"></canvas>
+    <script type="module">
+        import init, { original_pixcel } from './pkg/photo_filter.js';
+
+        async function run() {
+            await init();
+            const upload = document.getElementById('upload');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // 最大表示サイズ
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 600;
+
+            upload.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+
+                img.onload = () => {
+                    // オリジナル画像の幅と高さを取得
+                    let width = img.width;
+                    let height = img.height;
+
+                    // リサイズが必要な場合、アスペクト比を保ちながら調整
+                    if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+                        const aspectRatio = width / height;
+                        if (width > height) {
+                            width = MAX_WIDTH;
+                            height = Math.floor(MAX_WIDTH / aspectRatio);
+                        } else {
+                            height = MAX_HEIGHT;
+                            width = Math.floor(MAX_HEIGHT * aspectRatio);
+                        }
+                    }
+
+                    // キャンバスのサイズを調整して描画
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const imgData = ctx.getImageData(0, 0, width, height);
+
+                    // グレースケールに変換
+                    const grayData = original_pixcel(new Uint8Array(imgData.data.buffer), width, height, 120, 10);
+                    console.log("変換後")
+
+                    // グレースケール画像をキャンバスに描画
+                    const newImgData = new ImageData(new Uint8ClampedArray(grayData), width, height);
+                    ctx.putImageData(newImgData, 0, 0);
+                    console.log("変換後表示後")
+                };
+            });
+        }
+
+        run();
+    </script>
+</body>
+
+</html>

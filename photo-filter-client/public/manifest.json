@@ -1,0 +1,9 @@
+{
+  "short_name": "画像フィルター",
+  "name": "画像フィルター",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#101010",
+  "background_color": "#ffffff"
+}

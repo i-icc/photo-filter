@@ -1,0 +1,15 @@
+{
+  "name": "photo_filter",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "photo_filter_bg.wasm",
+    "photo_filter.js",
+    "photo_filter.d.ts"
+  ],
+  "main": "photo_filter.js",
+  "types": "photo_filter.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
